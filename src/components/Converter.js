@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import './Converter.css';
 
 class Converter extends Component {
   state = {
@@ -24,6 +25,18 @@ class Converter extends Component {
       this.calculate
     );
   };
+
+  switchSelect = () => {
+    let curBase = this.state.base
+    let curTo = this.state.convertTo
+    this.setState(
+      {
+        base: curTo,
+        convertTo: curBase
+      },
+      this.calculate
+    )
+  }
 
   handleInput = e => {
     this.setState(
@@ -56,57 +69,65 @@ class Converter extends Component {
 
   render() {
     return (
-      <Container>
-        <Card className="text-center" style={{ width: "18rem" }}>
-          <Card.Body>
-            <Form>
-              <Form.Group>
-                <Form.Label>From</Form.Label>
-                <select
-                  name="base"
-                  value={this.state.base}
-                  onChange={this.handleSelect}
-                >
-                  {this.state.currencies.map(currency => (
-                    <option key={currency} value={currency}>
-                      {currency}
-                    </option>
-                  ))}
-                  <option>USD</option>
-                </select>
-                <Form.Control
-                  type="number"
-                  value={this.state.amount}
-                  onChange={this.handleInput}
-                  placeholder="Enter amount"
-                />
-                <Form.Text className="text-muted"></Form.Text>
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>To</Form.Label>
-                <select
-                  name="convertTo"
-                  value={this.state.convertTo}
-                  onChange={this.handleSelect}
-                >
-                  {this.state.currencies.map(currency => (
-                    <option key={currency} value={currency}>
-                      {currency}
-                    </option>
-                  ))}
-                  <option>EUR</option>
-                </select>
-                <Form.Control
-                  type="number"
-                  disabled
-                  value={this.state.result}
-                />
-              </Form.Group>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Container>
+      <Card className="converter text-center" /*style={{ color: "white", width: "18rem", backgroundColor: "#18207E"}}*/>
+        <Card.Title className="form-title" >Currency Converter</Card.Title>
+        <Card.Body>
+          <Form>
+            <Form.Group className="form-convert">
+              <Form.Label className="from-to">From</Form.Label> 
+              <Form.Control
+                type="number"
+                min="0"
+                value={this.state.amount}
+                onChange={this.handleInput}
+                placeholder="Enter amount"
+              />
+              <select
+                name="base"
+                value={this.state.base}
+                onChange={this.handleSelect}
+                className="select-cur"
+              >
+                {this.state.currencies.map(currency => (
+                  <option key={currency} value={currency}>
+                    {currency}
+                  </option>
+                ))}
+                <option>USD</option>
+              </select>
+              <Form.Text className="text-muted"></Form.Text>
+            </Form.Group>
+            <div className="separate">
+              <span class="outer-line"></span>
+              <span class="fas fa fa-arrows-v" onClick={this.switchSelect} aria-hidden="true" style={{margin:"0 10px ", fontSize: "26px"}}></span>
+              <span class="outer-line"></span>
+            </div>
+            <Form.Group className="form-convert">
+              <Form.Label className="from-to">To</Form.Label>
+              
+              <Form.Control
+                type="number"
+                min="0"
+                disabled
+                value={this.state.result}
+              />
+              <select
+                name="convertTo"
+                value={this.state.convertTo}
+                onChange={this.handleSelect}
+                className="select-cur"
+              >
+                {this.state.currencies.map(currency => (
+                  <option key={currency} value={currency}>
+                    {currency}
+                  </option>
+                ))}
+                <option>EUR</option>
+              </select>
+            </Form.Group>
+          </Form>
+        </Card.Body>
+      </Card>
     );
   }
 }
